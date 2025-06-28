@@ -1,0 +1,15 @@
+apiVersion: monitoring.rhobs/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: threepilar-example
+  name: threepilar-coo-example-monitor
+  namespace: ns1-coo
+spec:
+  endpoints:
+  - interval: 30s
+    port: web
+    scheme: http
+  selector:
+    matchLabels:
+      app: threepilar-example
