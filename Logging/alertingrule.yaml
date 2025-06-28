@@ -15,7 +15,7 @@ spec:
             description: Rally count
             summary: ping pong is being played
           expr: >
-            sum(rate({kubernetes_namespace_name="ns1-coo", kubernetes_pod_name=~"threepilar-example-deployment.*"} |= "info" [1m])) > 0.01 
+            sum(rate({kubernetes_namespace_name="ns1-coo", kubernetes_pod_name=~"threepilar-coo-example-app.*"} |= "info"[1m])) > 0.01 
           for: 1m
           labels:
             severity: warning
