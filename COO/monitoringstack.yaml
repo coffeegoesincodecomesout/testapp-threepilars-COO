@@ -8,7 +8,7 @@ spec:
   retention: 1d
   resourceSelector:
       matchLabels:
-        k8s-app: prometheus-coo-example-monitor
+        k8s-app: threepilar-example
   namespaceSelector:
       matchLabels:
         monitoring.rhobs/stack: multi-ns
