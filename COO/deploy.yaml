@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: threepilar-example
+    openshift.io/log-alerting: 'true'
+  name: threepilar-coo-example-app
+  namespace: ns1-coo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: threepilar-example
+  template:
+    metadata:
+      labels:
+        app: threepilar-example
+    spec:
+      containers:
+      - image: quay.io/rhn_support_nigsmith/testapp-threepilars:latest
+        imagePullPolicy: IfNotPresent
+        name: threepilar-example
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: threepilar-example
+  name: threepilar-example-service
+  namespace: ns1-coo
+spec:
+  ports:
+  - port: 8090
+    protocol: TCP
+    targetPort: 8090
+    name: web
+  selector:
+    app: threepilar-example
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: threepilar-example-route
+  namespace: ns1-coo
+spec:
+  path: "/ping"
+  to:
+    kind: Service
+    name: threepilar-example-service
+    weight: 100
+  port:
+    targetPort: 8090
+---
+apiVersion: monitoring.rhobs/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: threepilar-example
+  name: threepilar-coo-example-monitor
+  namespace: ns1-coo
+spec:
+  endpoints:
+  - interval: 30s
+    port: web
+    scheme: http
+  selector:
+    matchLabels:
+      app: threepilar-example

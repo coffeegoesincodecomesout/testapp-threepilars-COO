@@ -1,0 +1,16 @@
+apiVersion: monitoring.rhobs/v1
+kind: PrometheusRule
+metadata:
+  name: threepilar-example-alert
+  namespace: ns1-coo
+  labels:
+    k8s-app: threepilar-example
+spec:
+  groups:
+  - name: threepilar-example
+    rules:
+    - alert: testapp-connection-count
+      for: 1m
+      expr: ping_request_count{job="threepilar-coo-example-app"} > 0
+      labels:
+        severity: warning
